@@ -1,7 +1,11 @@
 package com.example.cucumberpractice.bdd;
 
+import com.example.cucumberpractice.bdd.support.KnowsTheDomain;
 import com.example.cucumberpractice.bdd.transforms.MoneyConverter;
+import com.example.cucumberpractice.models.Account;
+import com.example.cucumberpractice.models.CashSlot;
 import com.example.cucumberpractice.models.Money;
+import com.example.cucumberpractice.models.Teller;
 import cucumber.api.Transform;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -12,68 +16,7 @@ public class StepDefinitions {
 
     private final KnowsTheDomain helper;
 
-    class Account{
-        private Money balance = new Money();
-        public void deposit(Money amount){
-            balance.add(amount);
-        }
-
-        public Money getBalance() {
-            return balance;
-        }
-    }
-
-    private class Teller {
-
-        private CashSlot cashSlot;
-
-        public Teller(CashSlot cashSlot){
-            this.cashSlot = cashSlot;
-        }
-
-        public void withdrawFromAccount(Account myAccount, int dollars) {
-            cashSlot.dispense(dollars);
-        }
-    }
-    private class CashSlot {
-        private int contents;
-        public int getContents() {
-            return contents;
-        }
-
-        public void dispense(int dollars) {
-            contents = dollars;
-        }
-    }
-
-    private class KnowsTheDomain {
-        private Account myAccount;
-        private CashSlot cashSlot;
-        private Teller teller;
-
-        public Account getMyAccount(){
-            if (myAccount == null){
-                myAccount = new Account();
-            }
-            return myAccount;
-        }
-
-        public CashSlot getCashSlot() {
-            if (cashSlot == null){
-                cashSlot = new CashSlot();
-            }
-            return cashSlot;
-        }
-
-        public Teller getTeller(){
-            if (teller == null){
-                teller = new Teller(getCashSlot());
-            }
-            return teller;
-        }
-    }
-
-    StepDefinitions(){
+    StepDefinitions() {
         helper = new KnowsTheDomain();
     }
 
@@ -94,7 +37,6 @@ public class StepDefinitions {
     public void $_should_be_be_dispensed(int dollars) throws Throwable {
         Assert.assertEquals("Incorrect amount dispensed -", dollars, helper.getCashSlot().getContents());
     }
-
 
 
 }
